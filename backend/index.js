@@ -7,12 +7,15 @@ const app = express();
 const mongoUrl = process.env.MONGO_URL;
 
 async function connectDB() {
+  console.log("connectDB() called");
+
   if (!mongoUrl) {
     console.log("MONGO_URL not set. Running without MongoDB");
     return;
   }
 
   try {
+    console.log("Attempting MongoDB connection...");
     await mongoose.connect(mongoUrl);
     console.log("MongoDB connected successfully");
   } catch (error) {
@@ -24,4 +27,16 @@ async function connectDB() {
 connectDB();
 
 // Health check endpoint
-app.get("/health", (req, r
+app.get("/health", (req, res) => {
+  res.send("Backend is healthy");
+});
+
+// Root endpoint (optional but helpful)
+app.get("/", (req, res) => {
+  res.send("Backend is running");
+});
+
+// Start server
+app.listen(3000, () => {
+  console.log("Backend running on port 3000");
+});
